@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Приветствие и проверка на простое число</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+            width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 5px 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        p {
+            margin-top: 10px;
+        }
+
+        #primeResults {
+            font-style: italic;
+            color: #888;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .result-text {
+            text-align: left;
+        }
+    </style>
+    <script>
+        var primeResults = [];
+
+        function greetAndCheckPrime() {
+            var currentDate = new Date();
+            var months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+            var days = ["воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота"];
+
+            var greeting = "Сегодня - " + currentDate.getDate() + " " + months[currentDate.getMonth()] + " " + currentDate.getFullYear() +
+                " года, " + addLeadingZero(currentDate.getHours()) + ":" + addLeadingZero(currentDate.getMinutes()) + ":" + addLeadingZero(currentDate.getSeconds()) +
+                ", " + days[currentDate.getDay()];
+
+            document.getElementById("greeting").innerText = greeting;
+        }
+
+        function isPrimeNumber(number) {
+            if (number <= 1) return false;
+            for (var i = 2; i <= Math.sqrt(number); i++) {
+                if (number % i === 0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function checkPrime() {
+            var userInput = document.getElementById("numberInput").value;
+            var isPrime = isPrimeNumber(userInput);
+            primeResults.push({ number: userInput, isPrime: isPrime });
+
+            var resultMessage = "Число " + userInput + " " + (isPrime ? "является простым." : "не является простым.");
+            document.getElementById("resultMessage").innerText = resultMessage;
+
+        }
+
+        function addLeadingZero(number) {
+            return number < 10 ? "0" + number : number;
+        }
+    </script>
+</head>
+<body onload="greetAndCheckPrime()">
+
+    <h1 id="greeting"></h1>
+
+    <form>
+        <label for="numberInput">Введите число:</label>
+        <input type="number" id="numberInput" name="numberInput" required>
+        <button type="button" onclick="checkPrime()">Проверить на простоту</button>
+    </form>
+
+    <p id="resultMessage"></p>
+    <p id="primeResults"></p>
+
+    <h1>Информация о преподавателях</h1>
+    <div class="container">
+
+        <form name="teacherForm">
+            <label for="nameInput">Имя преподавателя:</label>
+            <input type="text" id="nameInput" placeholder="Введите имя">
+
+            <label for="subjectInput">Предмет преподавания:</label>
+            <input type="text" id="subjectInput" placeholder="Введите предмет">
+
+            <label for="experienceInput">Опыт работы (в годах):</label>
+            <input type="text" id="experienceInput" placeholder="Введите опыт работы">
+
+            <button type="button" class="button" onclick="createTeacher()">Создать Преподавателя</button>
+        </form>
+
+        <div id="teachersInfo" class="result-text"></div>
+    </div>
+
+    <script>
+        function createTeacher() {
+            const name = document.getElementById('nameInput').value;
+            const subject = document.getElementById('subjectInput').value;
+            const experience = document.getElementById('experienceInput').value;
+
+            const newTeacher = new Teacher(name, subject, experience);
+            const newTeacherInfo = newTeacher.displayInfo();
+
+            const teachersInfoElement = document.getElementById('teachersInfo');
+            const pElement = document.createElement('p');
+            pElement.textContent = newTeacherInfo;
+            teachersInfoElement.appendChild(pElement);
+        }
+
+        // Создаем конструктор объекта Преподаватель
+        function Teacher(name, subject, experience) {
+            this.name = name;
+            this.subject = subject;
+            this.experience = experience;
+
+            // Метод для вывода информации о преподавателе
+            this.displayInfo = function () {
+                return this.name + ', преподаватель по ' + this.subject + ', опыт работы: ' + this.experience + ' лет.';
+            };
+
+            // Метод для изменения предмета преподавания
+            this.changeSubject = function (newSubject) {
+                this.subject = newSubject;
+            };
+
+            // Метод для увеличения опыта работы
+            this.increaseExperience = function (years) {
+                this.experience = parseInt(this.experience) + years;
+            };
+        }
+    </script>
+
+</body>
+</html>
